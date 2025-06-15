@@ -1,8 +1,9 @@
 package com.devsuperior.dscomerce.services;
 
-import java.util.List;
-import java.util.Optional;
 
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,10 +29,10 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductDTO> findAll() {
+    public Page<ProductDTO> findAll(Pageable pageable) {
 
-        List<Product> list = productRepository.findAll();
-        return list.stream().map(x -> new ProductDTO(x)).toList();
+        Page<Product> list = productRepository.findAll(pageable);
+        return list.map(x -> new ProductDTO(x));
     }
 
 }
