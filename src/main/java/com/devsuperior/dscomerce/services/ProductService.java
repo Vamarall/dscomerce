@@ -1,6 +1,5 @@
 package com.devsuperior.dscomerce.services;
 
-
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +32,22 @@ public class ProductService {
 
         Page<Product> list = productRepository.findAll(pageable);
         return list.map(x -> new ProductDTO(x));
+    }
+
+    @Transactional // Nao possui atributo "readOnly = true" pq ele faz mais que apenas uma consulta
+                   // no BD
+    public ProductDTO insert(ProductDTO dto) {
+
+        Product entity = new Product();
+        entity.setDescription(dto.getDescription());
+        entity.setName(dto.getName());
+        entity.setPrice(dto.getPrice());
+        entity.setImgUrl(dto.getImgUrl());
+
+        entity = productRepository.save(entity);
+
+        return new ProductDTO(entity);
+
     }
 
 }
